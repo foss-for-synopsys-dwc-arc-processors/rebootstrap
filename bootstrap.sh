@@ -123,6 +123,10 @@ join_words() {
 }
 
 check_arch() {
+	# Work around arch-test not supporting ARC
+	if test "$HOST_ARCH" = arc; then
+		return 0
+	fi
 	if elf-arch -a "$2" "$1"; then
 		return 0
 	else
@@ -1373,7 +1377,7 @@ patch_linux() {
 	kernel_arch=
 	comment="just building headers yet"
 	case "$HOST_ARCH" in
-		ia64|nios2)
+		arc|ia64|nios2)
 			kernel_arch=$HOST_ARCH
 		;;
 		mipsr6|mipsr6el|mipsn32r6|mipsn32r6el|mips64r6|mips64r6el)
