@@ -1145,6 +1145,11 @@ index f716a10f34..43224a7f25 100644
  	buf->__glibc_reserved[1] = 0;
 EOF
 	fi
+	if test "$HOST_ARCH" = arc; then
+		echo "patching glibc for arc glibc 2.31 port"
+		drop_privs patch -p1 <<'EOF'
+EOF
+	fi
 }
 
 add_automatic gmp
