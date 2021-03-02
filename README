@@ -8,6 +8,7 @@ architecture are reused. It expects to be able to install packages and will
 leave the filesystem in a dirty state (creating symlinks without tracking
 them). It has only ever been tested with pbuilder:
 
+pbuilder --create
 pbuilder --execute bootstrap.sh HOST_ARCH=$host_arch
 
 The following variables are supposed to be given as parameters (but setting
