@@ -750,10 +750,19 @@ patch_gcc_wdotap() {
 		drop_privs rm -Rf .pc
 	fi
 }
+patch_gcc_arc_matomic() {
+	# -matomic not enabled in gcc driver, assumed by glibc
+	if test "$HOST_ARCH" = arc; then
+		echo "patching gcc: default to -mcpu=hs38"
+		drop_privs patch -p1 <<'EOF'
+EOF
+	fi
+}
 patch_gcc_10() {
 	patch_gcc_default_pie_everywhere
 	patch_gcc_limits_h_test
 	patch_gcc_wdotap
+	patch_gcc_arc_matomic
 }
 patch_gcc_11() {
 	patch_gcc_limits_h_test
