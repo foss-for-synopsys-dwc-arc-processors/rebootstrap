@@ -755,6 +755,39 @@ patch_gcc_arc_matomic() {
 	if test "$HOST_ARCH" = arc; then
 		echo "patching gcc: default to -mcpu=hs38"
 		drop_privs patch -p1 <<'EOF'
+--- /dev/null
++++ b/debian/patches/arc-hs38-default.diff
+@@ -0,0 +1,18 @@
++#DP: build for hs38 as default
++
++---
++ gcc/config/arc/arc.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++--- a/src/gcc/config/arc/arc.h
+++++ b/src/gcc/config/arc/arc.h
++@@ -34,7 +34,7 @@ along with GCC; see the file COPYING3.  If not see
++ #define SYMBOL_FLAG_CMEM	(SYMBOL_FLAG_MACH_DEP << 3)
++ 
++ #ifndef TARGET_CPU_DEFAULT
++-#define TARGET_CPU_DEFAULT	PROCESSOR_arc700
+++#define TARGET_CPU_DEFAULT	PROCESSOR_hs38
++ #endif
++ 
++ /* Check if this symbol has a long_call attribute in its declaration */
++
+diff --git a/debian/rules.patch b/debian/rules.patch
+index afe17ea6a5ed..091ffe86622c 100644
+--- a/debian/rules.patch
++++ b/debian/rules.patch
+@@ -87,6 +87,7 @@ debian_patches += \
+ 	pr98274 \
+ 	pr97250-plugin-headers \
+ 	pr97714 \
++	arc-hs38-default \
+ 
+ ifneq (,$(filter $(distrelease),wheezy jessie stretch buster lucid precise trusty xenial bionic cosmic disco eoan))
+   debian_patches += pr85678-revert
 EOF
 	fi
 }
