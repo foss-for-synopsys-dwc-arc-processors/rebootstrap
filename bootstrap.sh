@@ -791,11 +791,56 @@ index afe17ea6a5ed..091ffe86622c 100644
 EOF
 	fi
 }
+patch_gcc_arc_multiarch() {
+	# missing multiarch bits
+	if test "$HOST_ARCH" = arc; then
+		echo "patching gcc: define multiarch things"
+		drop_privs patch -p1 <<'EOF'
+--- /dev/null
++++ b/debian/patches/arc-gcc-multilib.diff
+@@ -0,0 +1,21 @@
++#DP: define MULTIARCH_DIRNAME/MULTILIB_OSDIRNAMES
++
++---
++ gcc/config/arc/t-multilib-linux | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++--- a/src/gcc/config/arc/t-multilib-linux
+++++ b/src/gcc/config/arc/t-multilib-linux
++@@ -17,9 +17,11 @@
++ # <http://www.gnu.org/licenses/>.
++ 
++ MULTILIB_OPTIONS = mcpu=hs/mcpu=archs/mcpu=hs38/mcpu=hs38_linux/mcpu=arc700/mcpu=nps400
++-
++ MULTILIB_DIRNAMES = hs archs hs38 hs38_linux arc700 nps400
++ 
+++MULTILIB_OSDIRNAMES = ../lib$(call if_multiarch,:arc-linux-gnu)
+++MULTIARCH_DIRNAME = $(call if_multiarch,arc-linux-gnu)
+++
++ # Aliases:
++ MULTILIB_MATCHES += mcpu?arc700=mA7
++ MULTILIB_MATCHES += mcpu?arc700=mARC700
+diff --git a/debian/rules.patch b/debian/rules.patch
+index 091ffe86622c..080e2ed60203 100644
+--- a/debian/rules.patch
++++ b/debian/rules.patch
+@@ -88,6 +88,7 @@ debian_patches += \
+ 	pr97250-plugin-headers \
+ 	pr97714 \
+ 	arc-hs38-default \
++	arc-gcc-multilib \
+ 
+ ifneq (,$(filter $(distrelease),wheezy jessie stretch buster lucid precise trusty xenial bionic cosmic disco eoan))
+   debian_patches += pr85678-revert
+EOF
+	fi
+}
 patch_gcc_10() {
 	patch_gcc_default_pie_everywhere
 	patch_gcc_limits_h_test
 	patch_gcc_wdotap
 	patch_gcc_arc_matomic
+	patch_gcc_arc_multiarch
 }
 patch_gcc_11() {
 	patch_gcc_limits_h_test
