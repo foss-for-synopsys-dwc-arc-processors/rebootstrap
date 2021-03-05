@@ -771,7 +771,7 @@ patch_gcc_arc_matomic() {
 + 
 + #ifndef TARGET_CPU_DEFAULT
 +-#define TARGET_CPU_DEFAULT	PROCESSOR_arc700
-++#define TARGET_CPU_DEFAULT	PROCESSOR_hs38
+++#define TARGET_CPU_DEFAULT	PROCESSOR_hs38_linux
 + #endif
 + 
 + /* Check if this symbol has a long_call attribute in its declaration */
